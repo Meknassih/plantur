@@ -8,27 +8,41 @@ router.get('/', function (req, res, next) {
 });
 
 router.post('/login', function (req, res, next) {
-  console.log('POST login body', rea.body);
-  /* var mysql = require('mysql')
-  var connection = mysql.createConnection({
-    host: db.host,
-    user: db.user,
-    password: db.password,
-    database: db.database,
-    port: db.port
-  })
+  try {
+    if (!req.body.user) {
+      res.statusCode = 400;
+      return res.send({ error: 'Missing username' });
+    }
+    if (!req.body.password) {
+      res.statusCode = 400;
+      return res.send({ error: 'Missing password' });
+    }
+    
+    const mysql = require('mysql');
+    const connection = mysql.createConnection({
+      host: db.host,
+      user: db.user,
+      password: db.password,
+      database: db.database,
+      port: db.port
+    });
 
-  connection.connect();
+    connection.connect((err) => { throw err; });
 
-  connection.query(`SELECT * FROM users WHERE username=${} AND password=${}`, function (err, rows, fields) {
-    if (err) throw err
+    connection.query(`SELECT * FROM users WHERE username=${req.body.user} AND password=${req.body.password}`, function (err, rows, fields) {
+      if (err) throw err;
 
-    console.log('The solution is: ', rows[0].solution)
-  })
+      if (rows.length > 0) {
+        console.log('The solution is: ', rows[0]);
+        res.send({ message: 'Logged in !' });
+      } else {
+        res.statusCode = 401;
+        res.send({ message: 'Wrong login/password' })
+      }
+    })
 
-  connection.end() */
-
-  res.send({key: 'value'});
+    connection.end()
+  } catch (e) { console.error(e); }
 });
 
 module.exports = router;

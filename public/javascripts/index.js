@@ -1,16 +1,22 @@
 function login() {
     const request = new Request(
-        window.location.origin,
+        `${window.location.origin}/users/login`,
         {
             method: 'POST',
-            body: ({ user, password }).stringify()
+            body: JSON.stringify({ 
+                user: $('input#username-input').val(), 
+                password: $('input#pwd-input').val() 
+            }),
+            headers: {
+                'Content-Type': 'application/json'
+            }
         }
     );
 
     fetch(request)
         .then(response => {
             if (response.status === 200) {
-                return console.log('RESPONSE', response.json());
+                return response.json();
             } else {
                 throw new Error('Bad response');
             }
