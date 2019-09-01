@@ -3,9 +3,9 @@ function login() {
         `${window.location.origin}/users/login`,
         {
             method: 'POST',
-            body: JSON.stringify({ 
-                user: $('input#username-input').val(), 
-                password: $('input#pwd-input').val() 
+            body: JSON.stringify({
+                user: $('input#username-input').val(),
+                password: $('input#pwd-input').val()
             }),
             headers: {
                 'Content-Type': 'application/json'
@@ -23,8 +23,12 @@ function login() {
         })
         .then(response => {
             console.debug(response);
-            // ...
+            window.location.replace(`${window.location.origin}/home`);
         }).catch(error => {
             console.error(error);
         });
+}
+
+function handleHoveredRow(event, hovering) {
+    console.log(event, hovering);
 }
